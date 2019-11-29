@@ -15,10 +15,10 @@ public class Message implements Paquet {
 		private User destinatory ; 
 
 
-	public Message (String content, User auth, User dest ) {
+	public Message (String contenu, User auth, User dest ) {
 		this.paquetype = content.msg; 
 		this.time_sent = Date.Date() ; 
-		this.message_body = content ; 
+		this.message_body = contenu ; 
 		this.author = auth ;
 		this.destinatory = dest ; 
 	}
