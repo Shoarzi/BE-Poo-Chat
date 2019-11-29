@@ -21,10 +21,6 @@ public class User {
 		return this.pseudo ; 
 	}
 	
-	public EventListener receive_msg() {
-		
-	}
-	
 	public Message write_message(User dest) {
 		Scanner content = new Scanner(System.in);
 	    String msg = content.nextLine();

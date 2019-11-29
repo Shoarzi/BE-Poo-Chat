@@ -1,11 +1,14 @@
-package main_classes;
+package Paquets;
 
-import java.util.Date; 
+import java.util.Date;
+
+import main_classes.User; 
 
 //TODO Un message doit pouvoir être sauvegardé et historisé une fois qu'il a été créé 
 
-public class Message {
+public class Message implements Paquet {
 	
+		private content paquetype ; 
 		private Date time_sent ; 
 		private String message_body ; 
 		private User author ; 
@@ -13,6 +16,7 @@ public class Message {
 
 
 	public Message (String content, User auth, User dest ) {
+		this.paquetype = content.msg; 
 		this.time_sent = Date.Date() ; 
 		this.message_body = content ; 
 		this.author = auth ;
