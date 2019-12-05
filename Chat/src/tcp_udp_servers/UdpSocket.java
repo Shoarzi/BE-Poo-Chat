@@ -19,7 +19,7 @@ public class UdpSocket {
 			System.out.println("Le socket n'a pas put être créé");
 		} 
 	}
-
+	
 	public int getPort() {
 		return port;
 	}

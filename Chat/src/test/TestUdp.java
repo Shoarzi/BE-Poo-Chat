@@ -9,9 +9,9 @@ import java.net.UnknownHostException;
 
 public class TestUdp  {
 
-   public final static int port = 2345;
+	public final static int port = 2345;
    
-   public static void main(String[] args){
+	public static void main(String[] args){
     
       Thread t = new Thread(new Runnable(){
          public void run(){
