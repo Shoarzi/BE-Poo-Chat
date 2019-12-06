@@ -10,6 +10,28 @@ public class UdpSocket {
 	private int port ;  
 	private DatagramSocket s_socket_address ; 
 	
+	public UdpSocket() {
+		try {
+			setS_socket_address(new DatagramSocket());
+		} catch (SocketException e) {
+			System.out.println("Le socket n'a pas put être créé");
+			e.printStackTrace();
+		}
+		setS_ip_address(getS_socket_address().getInetAddress()) ; 
+		setPort(getS_socket_address().getPort()); 
+	}
+	
+	public UdpSocket(int p ) {
+		setPort(p) ;
+		try {
+			setS_socket_address(new DatagramSocket(p));
+		} catch (SocketException e) {
+			System.out.println("Le socket n'a pas put être créé");
+			e.printStackTrace();
+		} 
+		setS_ip_address(getS_socket_address().getInetAddress()) ; 
+	}
+	
 	public UdpSocket(int p, InetAddress add) {
 		setS_ip_address(add) ; 
 		setPort(p) ;
@@ -17,6 +39,7 @@ public class UdpSocket {
 			setS_socket_address(new DatagramSocket(p,add));
 		} catch (SocketException e) {
 			System.out.println("Le socket n'a pas put être créé");
+			e.printStackTrace();
 		} 
 	}
 	

@@ -11,15 +11,22 @@ import packets.Packet.protocol;
 import test.TestUdp.UDPClient;
 
 public class UdpSend {
-
+	
 	//socket sur lequel on va écouter les réponses
-	private UdpSocket sock; 
-	private Thread thread_listen ; 
-    private byte[] buffer;
+	private UdpSocket sock ; 
+	
+	//private Thread thread_listen ; 
+    private static byte[] buffer;
 		
+	
+	public UdpSend(User us) {
+		sock = new UdpSocket(us.getPort()); 
+	}
+	
 	public void send_message(String content, User author, User dest) {
 		
 		// on créé un buffer de réception 
+		setBuffer(author); 
 		byte[] buffer_content = content.getBytes() ; 
 		InetAddress adresse = dest.getAddress();
 		// on créé notre paquet UDP 
@@ -41,14 +48,6 @@ public class UdpSend {
 
 	public void setSock(User author) {
 		this.sock = new UdpSocket(author.getPort(),author.getAddress());
-	}
-
-	public Thread getThread_listen() {
-		return thread_listen;
-	}
-
-	public void setThread_listen() {
-		this.thread_listen = new Thread();
 	}
 
 	public byte[] getBuffer() {

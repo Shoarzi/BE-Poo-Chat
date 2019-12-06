@@ -22,6 +22,13 @@ public class User {
 		this.setAddress(); 
 	}
 	
+	public User(String pse, int port, InetAddress ad) {
+		this.setPseudo(pse); 
+		this.setPort(port);
+		this.address= ad ; 
+	}
+	
+	
 	public void read_message(Message M) {
 		System.out.println("Author : "+ M.getAuthor() +"\n");
 		System.out.println("Destinatory : "+ M.getDestinatory() +"\n");
