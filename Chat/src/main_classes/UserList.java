@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 public class UserList {
 
+	public User us ; 
+	
 	private ArrayList<User> users_connected ; 
 
 	public UserList() {
