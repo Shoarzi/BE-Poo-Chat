@@ -1,5 +1,6 @@
 package tcp_udp_servers;
 
+import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.SocketAddress;
 
@@ -52,7 +53,11 @@ public class UdpPacket {
 		this.setPort(port);
 	}
 	
-	
+	public DatagramPacket toDatagramPacket() {
+		
+		return new DatagramPacket(buffer, length, address, port) ; 
+		
+	}
 	
 	public byte[] getBuffer() {
 		return buffer;

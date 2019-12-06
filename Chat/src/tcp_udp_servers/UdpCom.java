@@ -1,5 +1,5 @@
-package test;
-import tcp_udp_servers.UdpSocket;
+package tcp_udp_servers;
+
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -7,11 +7,11 @@ import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 
-public class TestUdp  {
+public class UdpCom {
 
-	public final static int port = 2345;
+   public final static int port = 2345;
    
-	public static void main(String[] args){
+   public static void main(String[] args){
     
       Thread t = new Thread(new Runnable(){
          public void run(){
