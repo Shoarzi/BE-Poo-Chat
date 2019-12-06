@@ -10,53 +10,43 @@ import packets.Message;
 import packets.Packet.protocol;
 import test.TestUdp.UDPClient;
 
-public class UdpSend {
-	
-	//socket sur lequel on va écouter les réponses
-	private UdpSocket sock ; 
-	
-	//private Thread thread_listen ; 
-    private static byte[] buffer;
+import java.net.DatagramSocket;
+import java.net.SocketException;
+import java.net.UnknownHostException;
+
+public class UdpSend{
+     
+	public static void Send_message(User se, User re, String mes){
+
+		//Thread t = new Thread(new Runnable() {	      
+	  	    
+		//	public void run(){
 		
-	
-	public UdpSend(User us) {
-		sock = new UdpSocket(us.getPort()); 
-	}
-	
-	public void send_message(String content, User author, User dest) {
-		
-		// on créé un buffer de réception 
-		setBuffer(author); 
-		byte[] buffer_content = content.getBytes() ; 
-		InetAddress adresse = dest.getAddress();
-		// on créé notre paquet UDP 
-        UdpPacket packet = new UdpPacket(buffer, buffer.length, adresse, dest.getPort());
-        DatagramPacket Dpacket = packet.toDatagramPacket(); 
-        Dpacket.setData(buffer);
-        //on envoie le message
-        try {
-			sock.getS_socket_address().send(Dpacket);
-		} catch (IOException e) {
-			System.out.print("The message failed sending") ; 
-			e.printStackTrace();
-		}
-	}
-
-	public UdpSocket getSock() {
-		return sock;
-	}
-
-	public void setSock(User author) {
-		this.sock = new UdpSocket(author.getPort(),author.getAddress());
+				String envoi = se.getPseudo() + " : " + mes;
+	            byte[] buffer = envoi.getBytes();
+	   
+	            try {
+	               //On initialise la connexion côté client
+	               DatagramSocket client = new DatagramSocket();
+	               
+	               //On crée notre datagramme
+	               DatagramPacket packet = new DatagramPacket(buffer, buffer.length, re.getAddress(), re.getPort());
+	               
+	               //On lui affecte les données à envoyer
+	               packet.setData(buffer);
+	               
+	               //On envoie au serveur
+	               client.send(packet);
+	                        
+	            } catch (SocketException e) {
+	               e.printStackTrace();
+	            } catch (UnknownHostException e) {
+	               e.printStackTrace();
+	            } catch (IOException e) {
+	               e.printStackTrace();
+	            }
+	         }
+      	//});
+		//t.start() ; 
 	}
 
-	public byte[] getBuffer() {
-		return buffer;
-	}
-
-	public void setBuffer(User author) {
-		this.buffer = new byte[author.getPort()];
-	}
-	
-	
-}

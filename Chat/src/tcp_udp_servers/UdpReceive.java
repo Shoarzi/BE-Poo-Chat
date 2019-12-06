@@ -7,46 +7,62 @@ import java.net.SocketException;
 
 import main_classes.User;
 
-public  class UdpReceive {
+public class UdpReceive {
 	
 	private static DatagramSocket dsock ;  
     private static byte[] buffer;
-    private User dest; 
+    private static User dest; 
+    private static int once = 0 ; 
    
-	public static void main(String[] args){
-	
+	public static void Receive(User de){
+    	
+		setDest(de) ;
 	    Thread t = new Thread(new Runnable(){
-	        private DatagramPacket dpacket ;  
+	        
+	    	private DatagramPacket dpacket ;  
 	        
 			public void run() {
-		    	//this.setDest(dest) ;
-		    	
-		        //Création de la connexion côté serveur, en spécifiant un port d'écoute
-		    	try {
-					dsock = new DatagramSocket();
-			
-		    	//Objet Paquet 
-					buffer = new byte[8192] ; 
-					dpacket = new DatagramPacket(buffer,buffer.length) ;  
-		    	
-					dsock.receive(dpacket);
-	                  
-	                  //nous récupérons le contenu de celui-ci et nous l'affichons
-	                  String str = new String(dpacket.getData());
-	                  System.out.print("Reçu de la part de " + dpacket.getAddress() 
-	                                    + " sur le port " + dpacket.getPort() + " : ");
-	                  System.err.println(str);
-	                  
-		    	
-		    	} catch (SocketException e) {
-					e.printStackTrace();
+				
+				try {
+					
+					//Création de la connexion côté serveur, en spécifiant un port d'écoute
+					
+					if (once == 0)  {
+						dsock = new DatagramSocket(de.getPort());
+						once ++ ;
+					}
+					
+					while (true) {
+						
+						//Objet Paquet 
+						buffer = new byte[8192] ; 
+						dpacket = new DatagramPacket(buffer,buffer.length) ;  
+			    	
+						dsock.receive(dpacket);
+		                  
+		                  //nous récupérons le contenu de celui-ci et nous l'affichons
+		                String str = new String(dpacket.getData());
+		                System.out.print("Reçu de la part de " + dpacket.getAddress() + " sur le port " + dpacket.getPort() + " : ");
+		                System.err.println(str);
+		                  
+		                dpacket.setLength(buffer.length);
+		                  
+			    	} 
 				}
-		    }
+				catch (SocketException e) {
+						e.printStackTrace();
+				} 
+				catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();	
+			    }
+			}
 	    });
+	    t.start();
 	}
 	
     
-    public void Receive_message() {
+   /* public void Receive_message() {
     	
     	try {
 			dsock.receive(dpacket) ;
@@ -65,15 +81,8 @@ public  class UdpReceive {
     	System.out.print(data) ; 
     	
     }
-    
-    
-    
-	public UdpSocket getSock() {
-		return sock;
-	}
-	public void setSock(UdpSocket sock) {
-		this.sock = sock;
-	}
+    */
+
 
 	public byte[] getBuffer() {
 		return buffer;
@@ -82,16 +91,12 @@ public  class UdpReceive {
 		this.buffer = buffer;
 	}
 
-
-
 	public User getDest() {
 		return dest;
 	}
 
-
-
-	public void setDest(User dest) {
-		this.dest = dest;
+	public static void setDest(User de) {
+		dest = de;
 	}
 
 
