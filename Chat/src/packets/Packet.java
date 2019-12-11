@@ -59,6 +59,9 @@ public abstract class Packet {
 	public User getDestinatory(){
 		return this.destinatory ; 
 	}
+
+	public abstract String getMessage_body();
+	// only defined if the type is msg
 	
 }
 

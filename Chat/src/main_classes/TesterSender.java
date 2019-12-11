@@ -9,21 +9,23 @@ import tcp_udp_servers.UdpSend;
 import tcp_udp_servers.UdpReceive;
 
 
-public class Tester2 {
+public class TesterSender {
 
 	public static InetAddress add1;
 	public static InetAddress add2; 
-	private static User user1 = new User("José",4242) ;
-	private static User user2 ; 
+	private static User user1 ; 
+	private static User user2 =new User("Henry",4445) ; 
 	private static Packet pa ;
 	
 	public static void main(String[] args) {
 		try {
-			user2 = new User("Henry", 4445, InetAddress.getLocalHost()) ;
+			user1 = new User("José",4242, InetAddress.getLocalHost()) ;
 		} catch (UnknownHostException e) {
-			System.out.print("addresse receiver inconnue"); 
-		} 
-		UdpReceive.Receive(user2); 
+			System.out.print("Addresse Sender inconnue") ; 
+		}
+		pa = new NotifIn(protocol.udp, user1, user2 ); 
+		UdpReceive.Receive(user1); 
+		UdpSend.Send_message(pa);
 		UdpSend.CloseSocket(); 
 	}
 	

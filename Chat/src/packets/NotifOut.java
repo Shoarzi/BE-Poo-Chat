@@ -14,4 +14,10 @@ public class NotifOut extends Packet {
 		this.setDestinatory(dest) ; 
 	}
 
+	@Override
+	public String getMessage_body() {
+		// only useful if the Packet is a Message 
+		return null;
+	}
+
 }

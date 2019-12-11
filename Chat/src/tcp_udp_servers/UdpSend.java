@@ -7,6 +7,7 @@ import java.util.Scanner;
 
 import main_classes.User;
 import packets.Message;
+import packets.Packet;
 import packets.Packet.protocol;
 import test.TestUdp.UDPClient;
 
@@ -15,38 +16,63 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 
 public class UdpSend{
+	
+	static DatagramSocket client ; 
+	static byte[] buffer ; 
+	static String envoi ; 
      
-	public static void Send_message(User se, User re, String mes){
+	public static void Send_message(Packet mes){
 
-		//Thread t = new Thread(new Runnable() {	      
-	  	    
-		//	public void run(){
+        try {
+            //On initialise la connexion côté client
+            client = new DatagramSocket();
+            
+			switch (mes.getPacketype()) {
+				case msg : 
+					
+					envoi = "Ms" + mes.getAuthor().getPseudo() + " : " + mes.getMessage_body();
+		            break ; 
 		
-				String envoi = se.getPseudo() + " : " + mes;
-	            byte[] buffer = envoi.getBytes();
-	   
-	            try {
-	               //On initialise la connexion côté client
-	               DatagramSocket client = new DatagramSocket();
-	               
-	               //On crée notre datagramme
-	               DatagramPacket packet = new DatagramPacket(buffer, buffer.length, re.getAddress(), re.getPort());
-	               
-	               //On lui affecte les données à envoyer
-	               packet.setData(buffer);
-	               
-	               //On envoie au serveur
-	               client.send(packet);
-	                        
-	            } catch (SocketException e) {
-	               e.printStackTrace();
-	            } catch (UnknownHostException e) {
-	               e.printStackTrace();
-	            } catch (IOException e) {
-	               e.printStackTrace();
-	            }
-	         }
+				case notifin : 
+					
+					envoi = "Ni" + mes.getAuthor().getPseudo() + ":" + mes.getAuthor().getAddress() + ":"  + mes.getAuthor().getPort() ;
+					break ;
+					
+				case notifinback : 
+					envoi = "Nb" + mes.getAuthor().getPseudo() + " : " + mes.getAuthor().getPort(); 
+					break ; 
+					
+				case notifout : 
+					envoi = "No" + mes.getAuthor().getPseudo() + " : " + mes.getAuthor().getPort(); 
+					break ; 
+	        	}
+            
+            buffer = envoi.getBytes();        
+
+			//On crée notre datagramme
+            DatagramPacket packet = new DatagramPacket(buffer, buffer.length, mes.getDestinatory().getAddress(), mes.getDestinatory().getPort());
+            
+            //On lui affecte les données à envoyer
+            packet.setData(buffer);
+            
+            //On envoie au serveur
+            client.send(packet);    
+	        }
+		catch (SocketException e) {
+            e.printStackTrace();
+         } catch (UnknownHostException e) {
+            e.printStackTrace();
+         } catch (IOException e) {
+            e.printStackTrace();
+         }
       	//});
 		//t.start() ; 
 	}
+
+public static void CloseSocket() { 
+
+		client.close();
+
+	}
+}
 

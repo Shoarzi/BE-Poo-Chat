@@ -12,4 +12,10 @@ public class NotifInBack extends Packet {
 		this.setAuthor(auth) ;
 		this.setDestinatory(dest) ; 
 	}
+
+	@Override
+	public String getMessage_body() {
+		// only useful if the Packet is a Message 
+		return null;
+	}
 }

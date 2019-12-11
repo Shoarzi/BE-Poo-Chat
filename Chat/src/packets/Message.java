@@ -25,5 +25,4 @@ public class Message extends Packet{
 		return this.message_body ; 
 	}
 	
-	
 }
