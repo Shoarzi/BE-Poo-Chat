@@ -4,7 +4,10 @@ import javax.swing.UIManager;
 
 public class main {
 	public static void main(String[] args) {
+		/*String L[] = null;
+		L[0]="";*/
 		
-		Window window= new Window();
+		//pas de pseudo avec des :
+		Window window= new Window("pierre","paul");
 	}
 }
