@@ -19,8 +19,8 @@ public class TesterSender {
 	
 	public static void main(String[] args) {
 		try {
-			user2 = new User("Henry",4445, InetAddress.getByName("195.83.11.69")) ; 
-			user1 = new User("José",4242, InetAddress.getLocalHost()) ;
+			user2 = new User("Henry",4242, InetAddress.getByName("10.1.5.153")) ; 
+			user1 = new User("José",4242, InetAddress.getByName("10.1.5.154")) ;
 		} catch (UnknownHostException e) {
 			System.out.print("Addresse Receiver inconnue du sender ") ; 
 		}
@@ -35,7 +35,7 @@ public class TesterSender {
 	}
 
 	public void setUser1(User user1) {
-		this.user1 = user1;
+		TesterSender.user1 = user1;
 	}
 
 	public User getUser2() {
@@ -43,7 +43,7 @@ public class TesterSender {
 	}
 
 	public void setUser2(User user2) {
-		this.user2 = user2;
+		TesterSender.user2 = user2;
 	}
 
 }

@@ -4,8 +4,6 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 import packets.*;
-import packets.Packet.protocol;
-import tcp_udp_servers.UdpSend;
 import tcp_udp_servers.UdpReceive;
 
 
@@ -32,7 +30,7 @@ public class Tester2 {
 	}
 
 	public void setUser1(User user1) {
-		this.user1 = user1;
+		Tester2.user1 = user1;
 	}
 
 	public User getUser2() {
@@ -40,7 +38,7 @@ public class Tester2 {
 	}
 
 	public void setUser2(User user2) {
-		this.user2 = user2;
+		Tester2.user2 = user2;
 	}
 
 }
