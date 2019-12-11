@@ -113,64 +113,13 @@ public class Window extends JFrame{
         
         panelGlobal.add(panelMessages);
         panelGlobal.add(panelNewMessage);
-        // Add the three panels into the frame
+        
         this.setLayout(new FlowLayout());
         this.add(panelGlobal);
-        //this.add(panel2);
-        //this.add(panel3);
-        //this.add(panel4);
          
         // Set the window to be visible as the default to be false
         this.pack();
         this.setVisible(true);
 		
-		//settings'content
-		/*label= new JLabel();
-		bouton=new JButton(" envoyer ");
-		label.setBackground(Color.lightGray);
-		label.setOpaque(true);
-		Dimension dim= new Dimension(200,50);
-		text.setSize(dim);
-		label.setMaximumSize(dim);
-		
-		//add content
-		//panel1 : 1->2
-		label=new JLabel("Message de pierre vers paul ");
-		
-		panel.setLayout(new BoxLayout(panel,BoxLayout.Y_AXIS));
-		panel.setAlignmentX(Component.LEFT_ALIGNMENT);
-		
-		panel.add(new JLabel(pseudo1));
-		panel.add(label);
-		
-		//panel2 : 2-> 1 
-		label=new JLabel("Message de paul vers pierre ");
-		panel2.setLayout(new BoxLayout(panel2,BoxLayout.Y_AXIS));
-		panel2.setAlignmentX(Component.RIGHT_ALIGNMENT);
-		panel2.add(new JLabel(pseudo2));
-		panel2.add(label);
-
-		
-		//panel 3 : Jtextflied + button 
-		panel3.add(new JTextField());
-		panel3.add(bouton);
-		
-		
-		
-		
-		
-		//panel4.add(panel,BorderLayout.WEST);
-		//panel4.add(panel2,BorderLayout.EAST);
-		//panel4.add(panel3,BorderLayout.SOUTH);
-		//set layout
-		
-		
-		//panel3.setLayout(new BoxLayout(panel3, BoxLayout.X_AXIS));
-		
-		this.add(panel);
-		this.add(panel2);
-		
-		this.setContentPane(panel4);
-	    this.setVisible(true);*/
 	}
 }       
