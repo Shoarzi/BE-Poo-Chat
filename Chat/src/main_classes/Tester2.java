@@ -24,7 +24,7 @@ public class Tester2 {
 			System.out.print("addresse receiver inconnue"); 
 		} 
 		UdpReceive.Receive(user2); 
-		UdpSend.CloseSocket(); 
+		//UdpSend.CloseSocket(); 
 	}
 	
 	public User getUser1() {

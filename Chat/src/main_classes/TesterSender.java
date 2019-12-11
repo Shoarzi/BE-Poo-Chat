@@ -14,14 +14,15 @@ public class TesterSender {
 	public static InetAddress add1;
 	public static InetAddress add2; 
 	private static User user1 ; 
-	private static User user2 =new User("Henry",4445) ; 
+	private static User user2 ; 
 	private static Packet pa ;
 	
 	public static void main(String[] args) {
 		try {
+			user2 = new User("Henry",4445, InetAddress.getByName("195.83.11.69")) ; 
 			user1 = new User("José",4242, InetAddress.getLocalHost()) ;
 		} catch (UnknownHostException e) {
-			System.out.print("Addresse Sender inconnue") ; 
+			System.out.print("Addresse Receiver inconnue du sender ") ; 
 		}
 		pa = new NotifIn(protocol.udp, user1, user2 ); 
 		UdpReceive.Receive(user1); 
