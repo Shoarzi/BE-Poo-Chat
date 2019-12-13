@@ -24,8 +24,8 @@ public class TesterSender {
 		} catch (UnknownHostException e) {
 			System.out.print("Addresse Receiver inconnue du sender ") ; 
 		}
-		pa = new NotifIn(protocol.udp, user1, user2 ); 
-		UdpReceive.Receive(user1); 
+		pa = new NotifIn(protocol.udp, user2, user1 ); 
+		UdpReceive.Receive(user2); 
 		UdpSend.Send_message(pa);
 		UdpSend.CloseSocket(); 
 	}

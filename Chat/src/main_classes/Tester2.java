@@ -17,7 +17,7 @@ public class Tester2 {
 	
 	public static void main(String[] args) {
 		try {
-			user2 = new User("Henry", 4445, InetAddress.getLocalHost()) ;
+			user2 = new User("Henry", 4242, InetAddress.getByName("10.1.5.153")) ;
 		} catch (UnknownHostException e) {
 			System.out.print("addresse receiver inconnue"); 
 		} 

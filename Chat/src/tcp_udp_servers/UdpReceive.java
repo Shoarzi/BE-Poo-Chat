@@ -7,6 +7,9 @@ import java.net.InetAddress;
 import java.net.SocketException;
 
 import main_classes.User;
+import packets.NotifInBack;
+import packets.Packet;
+import packets.Packet.protocol;
 
 public class UdpReceive {
 	
@@ -44,7 +47,18 @@ public class UdpReceive {
 		                if (strtype.contentEquals("Ms")) {
 		                	System.out.print(str.substring(2));
 		                }
-		                else if (strtype.contentEquals("Ni")) 
+		                
+		                //Méthode utilisant nos classes pour envoyer la notif Back 
+		                else if (strtype.contentEquals("Ni")) {
+		                	String delim = "[:]";  
+		                	String[] strelems = str.split(delim) ; 
+		                	User dest_rep = new User(strelems[0], Integer.parseInt(strelems[2]),InetAddress.getByName(strelems[1])) ; 
+		                	NotifInBack paquetrep = new NotifInBack(protocol.udp, dest, dest_rep) ; 
+		                	UdpSend.Send_message(paquetrep);
+		                }
+		                
+		                //Methode n'utilisant pas nos classes pour envoyer la notif back
+		                else if (strtype.contentEquals("NI")) 
 		                {
 		                	String delim = "[:]";  
 		                	String strrep = new String ("Nb" + dest.getPseudo() + " : " + dest.getPort()) ; 
