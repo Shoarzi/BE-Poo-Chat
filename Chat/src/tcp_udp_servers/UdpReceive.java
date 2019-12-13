@@ -26,12 +26,9 @@ public class UdpReceive {
 	    	private DatagramPacket dpacket ;  
 	        
 			public void run() {
-				
 				try {
-					
 					//Création de la connexion côté serveur, en spécifiant un port d'écoute
 					dsock = new DatagramSocket(dest.getPort());
-
 					
 					while (true) {
 						
