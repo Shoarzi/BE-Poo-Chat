@@ -39,7 +39,7 @@ public class UdpReceive {
 						dsock.receive(dpacket);
 		                  
 		                  //nous récupérons le contenu de celui-ci et nous l'affichons
-		                String str = new String(dpacket.getData());
+		                String str = (new String(dpacket.getData())).substring(0, dpacket.getLength());
 		                String strtype = str.substring(0, 2);
 		                if (strtype.contentEquals("Ms")) {
 		                	System.out.print(str.substring(2));
@@ -49,7 +49,9 @@ public class UdpReceive {
 		                else if (strtype.contentEquals("Ni")) {
 		                	String delim = "[:]";  
 		                	String[] strelems = str.split(delim) ; 
-		                	User dest_rep = new User(strelems[0], Integer.parseInt(strelems[2]),InetAddress.getByName(strelems[1])) ; 
+		                	int portdist = Integer.parseInt(strelems[2]); 
+		                	InetAddress addist = InetAddress.getByName(strelems[1].substring(1)) ; 
+		                	User dest_rep = new User(strelems[0], portdist, addist) ; 
 		                	NotifInBack paquetrep = new NotifInBack(protocol.udp, dest, dest_rep) ; 
 		                	UdpSend.Send_message(paquetrep);
 		                }
