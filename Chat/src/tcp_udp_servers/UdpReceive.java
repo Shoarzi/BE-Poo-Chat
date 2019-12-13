@@ -28,7 +28,9 @@ public class UdpReceive {
 			public void run() {
 				try {
 					//Création de la connexion côté serveur, en spécifiant un port d'écoute
-					dsock = new DatagramSocket(dest.getPort());
+					if !(dsock.isConnected()) { 
+						dsock = new DatagramSocket(dest.getPort());
+					}
 					
 					while (true) {
 						
@@ -46,7 +48,7 @@ public class UdpReceive {
 		                }
 		                
 		                //Méthode utilisant nos classes pour envoyer la notif Back 
-		                else if (strtype.contentEquals("Ni")) {
+		                else if (strtype.contentEquals("NI")) {
 		                	String delim = "[:]";  
 		                	String[] strelems = str.split(delim) ; 
 		                	int portdist = Integer.parseInt(strelems[2]); 
@@ -57,14 +59,14 @@ public class UdpReceive {
 		                }
 		                
 		                //Methode n'utilisant pas nos classes pour envoyer la notif back
-		                else if (strtype.contentEquals("NI")) 
+		                else if (strtype.contentEquals("Ni")) 
 		                {
 		                	String delim = "[:]";  
 		                	String strrep = new String ("Nb" + dest.getPseudo() + " : " + dest.getPort()) ; 
 		                	byte[] bufferrep = new String(strrep).getBytes() ; 
 		                	String[] strelems = str.split(delim) ; 
 		                	//creation of the response packet 
-		                	DatagramPacket rep = new DatagramPacket(bufferrep,bufferrep.length, InetAddress.getByName(strelems[1]), Integer.parseInt(strelems[2])); 
+		                	DatagramPacket rep = new DatagramPacket(bufferrep,bufferrep.length, InetAddress.getByName(strelems[1].substring(1)), Integer.parseInt(strelems[2])); 
 		                	dsock.send(rep) ; 
 		                	rep.setLength(bufferrep.length);
 		                	

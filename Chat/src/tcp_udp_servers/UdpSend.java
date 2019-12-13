@@ -25,8 +25,9 @@ public class UdpSend{
 
         try {
             //On initialise la connexion côté client
-            client = new DatagramSocket();
-            
+            if (!client.isConnected()) {
+            	client = new DatagramSocket();
+            }
 			switch (mes.getPacketype()) {
 				case msg : 
 					
