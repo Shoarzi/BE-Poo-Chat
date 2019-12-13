@@ -7,7 +7,7 @@ import packets.*;
 import tcp_udp_servers.UdpReceive;
 
 
-public class Tester2 {
+public class TesterReceiver {
 
 	public static InetAddress add1;
 	public static InetAddress add2; 
@@ -17,7 +17,7 @@ public class Tester2 {
 	
 	public static void main(String[] args) {
 		try {
-			user2 = new User("Henry", 4445, InetAddress.getLocalHost()) ;
+			user2 = new User("Henry", 4242, InetAddress.getByName("10.1.5.17")) ;
 		} catch (UnknownHostException e) {
 			System.out.print("addresse receiver inconnue"); 
 		} 
@@ -30,7 +30,7 @@ public class Tester2 {
 	}
 
 	public void setUser1(User user1) {
-		Tester2.user1 = user1;
+		TesterReceiver.user1 = user1;
 	}
 
 	public User getUser2() {
@@ -38,7 +38,7 @@ public class Tester2 {
 	}
 
 	public void setUser2(User user2) {
-		Tester2.user2 = user2;
+		TesterReceiver.user2 = user2;
 	}
 
 }

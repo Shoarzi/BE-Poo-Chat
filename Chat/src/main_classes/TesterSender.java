@@ -19,13 +19,13 @@ public class TesterSender {
 	
 	public static void main(String[] args) {
 		try {
-			user2 = new User("Henry",4242, InetAddress.getByName("10.1.5.153")) ; 
-			user1 = new User("José",4242, InetAddress.getByName("10.1.5.154")) ;
+			user2 = new User("Henry",4242, InetAddress.getByName("10.1.5.17")) ; 
+			user1 = new User("José",4242, InetAddress.getByName("10.1.5.16")) ;
 		} catch (UnknownHostException e) {
 			System.out.print("Addresse Receiver inconnue du sender ") ; 
 		}
-		pa = new NotifIn(protocol.udp, user1, user2 ); 
-		UdpReceive.Receive(user1); 
+		pa = new NotifIn(protocol.udp, user2, user1 ); 
+		UdpReceive.Receive(user2); 
 		UdpSend.Send_message(pa);
 		UdpSend.CloseSocket(); 
 	}
