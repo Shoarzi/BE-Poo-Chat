@@ -7,7 +7,7 @@ import packets.*;
 import tcp_udp_servers.UdpReceive;
 
 
-public class Tester2 {
+public class TesterReceiver {
 
 	public static InetAddress add1;
 	public static InetAddress add2; 
@@ -30,7 +30,7 @@ public class Tester2 {
 	}
 
 	public void setUser1(User user1) {
-		Tester2.user1 = user1;
+		TesterReceiver.user1 = user1;
 	}
 
 	public User getUser2() {
@@ -38,7 +38,7 @@ public class Tester2 {
 	}
 
 	public void setUser2(User user2) {
-		Tester2.user2 = user2;
+		TesterReceiver.user2 = user2;
 	}
 
 }
