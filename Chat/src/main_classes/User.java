@@ -1,84 +1,49 @@
 package main_classes;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.util.Scanner ; 
-import packets.Message;
-import packets.Packet.protocol;
-//import java.util.EventListenerProxy;
-import packets.Message; 
-
-// TODO implémenter une méthode qui vérifie si 2 utilisateurs sont les mêmes 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintStream;
+import java.net.Socket;
 
 public class User {
+  private static int nbUser = 0;
+  private int userId;
+  private PrintStream streamOut;
+  private InputStream streamIn;
+  private String nickname;
+  private Socket client;
 
-	private String pseudo; 
-	private int port ; 
-	private InetAddress address ; 
-	
-	public User(String pse) {
-		this.setPort(4242) ;  ; 
-		this.setPseudo(pse) ; 
-		this.setAddress(); 
-	}
-		//récupération de la liste d'utilisateurs connectés. 
-	//on affecte un port par défaut
-	
-	public User(String pse, int port) {
-		this.setPseudo(pse); 
-		this.setPort(port);
-		this.setAddress(); 
-	}
-	
-	public User(String pse, int port, InetAddress ad) {
-		this.setPseudo(pse); 
-		this.setPort(port);
-		this.address= ad ; 
-	}
-	
-	
-	public void setPseudo(String pse) {
-		this.pseudo = pse ; 
-	}
-	
-	public String getPseudo() {
-		return this.pseudo ; 
-	}
-	
-	/*public Message send_message(User dest) {
-		Scanner content = new Scanner(System.in);
-	    String msg = content.nextLine();
-	    Message m = new Message(msg, this, dest); 
-	    content.close();
-	    return m ; 
-	}
-	
-	public void read_message(Message M) {
-		System.out.println("Author : "+ M.getAuthor() +"\n");
-		System.out.println("Destinatory : "+ M.getDestinatory() +"\n");
-		System.out.println("Date : "+ M.getDate() +"\n");
-		System.out.println("Message : "+ M.getMessage_body()+"\n");}
-	 */
+  // constructor
+  public User(Socket client, String name) throws IOException {
+    this.streamOut = new PrintStream(client.getOutputStream());
+    this.streamIn = client.getInputStream();
+    this.client = client;
+    this.nickname = name;
+    this.userId = nbUser;
+    nbUser += 1;
+  }
 
-	public int getPort() {
-		return port;
-	}
+  // getteur
+  public PrintStream getOutStream(){
+    return this.streamOut;
+  }
 
-	public void setPort(int port) {
-		this.port = port;
-	}
+  public InputStream getInputStream(){
+    return this.streamIn;
+  }
 
-	public InetAddress getAddress() {
-		return address;
-	}
+  public String getNickname(){
+    return this.nickname;
+  }
 
-	public void setAddress() {
-		try {
-			this.address = InetAddress.getLocalHost();
-		} catch (UnknownHostException e) {
-			System.out.print("Error, can't find IP address") ; 
-			e.printStackTrace();
-		}
-	}
+  // print user with his color
+  public String toString(){
+
+    return "<u><span>" + this.getNickname() + "</span></u>";
+
+  }
 }
+
+
+
  
