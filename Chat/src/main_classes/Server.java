@@ -1,5 +1,7 @@
 package main_classes;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.InputStream;
@@ -9,6 +11,8 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.UUID;
+import java.util.Vector;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
@@ -40,13 +44,20 @@ public class Server {
       Socket client = server.accept();
 
       // get nickname of newUser
-      String nickname = (new Scanner ( client.getInputStream() )).nextLine();
+      InputStream testIS = client.getInputStream() ; 
+      Scanner testSC = new Scanner ( testIS ) ; 
+      String nickname = (testSC.nextLine());
+      if (!checkUniqueNickName(nickname)) {
+    	  // we display a message informing the double to the User
+          User newUser = new User(client, nickname); 
+          newUser.getOutStream().println("<b>This name is already taken</b> ");
+      }
       nickname = nickname.replace(",", ""); //  ',' use for serialisation
       nickname = nickname.replace(" ", "_");
       System.out.println("New Client: \"" + nickname + "\"\n\t     Host:" + client.getInetAddress().getHostAddress());
 
       // create new User
-      User newUser = new User(client, nickname);
+      User newUser = new User(client, nickname); 
 
       // add newUser message to list
       this.clients.add(newUser);
@@ -59,7 +70,16 @@ public class Server {
     }
   }
 
-  // delete a user from the list
+  private boolean checkUniqueNickName(String nickname) {
+	for (User client : this.clients) { 
+		if (client.getNickname() == nickname) { 
+			return false; 
+		}
+	}
+	return true ; 
+}
+
+// delete a user from the list
   public void removeUser(User user){
     this.clients.remove(user);
   }
@@ -94,6 +114,53 @@ public class Server {
       userSender.getOutStream().println(userSender.toString() + " -> (<b>no one!</b>): " + msg);
     }
   }
+  
+  public void sendHistoricMsgToUser() {
+	  
+  }
+  
+  public void historizeMessage (File dirtosearch, String msg, UUID idsender, UUID idreceiver) {
+			File[] listOfFiles = dirtosearch.listFiles();
+			Vector<File> listOfSimpleFiles = new Vector<File>();
+			for (File file : listOfFiles) {
+				listOfSimpleFiles.add(file);		
+			}
+			String name1 ; 
+			if (idsender.toString().compareTo(idreceiver.toString()) > 0) {
+				name1 = idsender.toString()+idreceiver.toString() ;
+			}
+			else {
+				name1 = idreceiver.toString()+idsender.toString() ; 
+			}
+			boolean find = false;
+			File filewanted ; 
+			
+			int i = 0;
+			while (i < listOfSimpleFiles.size() && !find) {
+				if (listOfSimpleFiles.get(i).getName()
+						.equals(name1)) {
+					find = true ; 
+					filewanted = listOfSimpleFiles.get(i) ; 
+				} else
+					i++;
+			}
+			if (find) { 
+				// ajouter la conv à l'historique
+				FileWriter fr;
+				try {
+					fr = new FileWriter(filewanted, true);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				fr.write("data");
+				fr.close();
+		
+			}
+			else {
+				// créer l'historique 
+			}
+  }
 }
 
 class UserHandler implements Runnable {
@@ -115,20 +182,21 @@ class UserHandler implements Runnable {
 	    while (sc.hasNextLine()) {
 	      message = sc.nextLine();
 
-	      if (!message.isEmpty()) {
+	 
 	      // Gestion des messages private
-		      if (message.charAt(0) == '@'){
-		        if(message.contains(" ")){
-		          System.out.println("private msg : " + message);
-		          int firstSpace = message.indexOf(" ");
-		          String userPrivate= message.substring(1, firstSpace);
-		          server.sendMessageToUser(
-		              message.substring(
-		                firstSpace+1, message.length()
-		                ), user, userPrivate
-		              );
-		        
-		        }
+	    	  if (!message.isEmpty()) { 
+			      if (message.charAt(0) == '@'){
+			        if(message.contains(" ")){
+			          System.out.println("private msg : " + message);
+			          int firstSpace = message.indexOf(" ");
+			          String msg = message.substring(
+				                firstSpace+1, message.length()
+				                );
+			          String userPrivate= message.substring(1, firstSpace);
+			          server.sendMessageToUser(msg, user, userPrivate);
+			        
+			        }
+			      
 		      }
 	      }
 	        else {
