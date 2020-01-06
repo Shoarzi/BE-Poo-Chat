@@ -7,20 +7,11 @@ import java.net.Socket;
 import java.util.UUID;
 
 public class User {
-  private static int nbUser = 0;
-  private UUID userId;
-  private PrintStream streamOut;
-  private InputStream streamIn;
-  private String nickname;
-  private Socket client;
+
 
   // constructor
   public User(Socket client, String name) throws IOException {
-    this.streamOut = new PrintStream(client.getOutputStream());
-    this.streamIn = client.getInputStream();
-    this.client = client;
-    this.nickname = name;
-    this.setUserId(java.util.UUID.randomUUID());
+
     nbUser += 1;
   }
   
@@ -53,13 +44,7 @@ public class User {
 
   }
 
-public UUID getUserId() {
-	return userId;
-}
 
-public void setUserId(UUID uuid) {
-	this.userId = uuid;
-}
 }
 
 

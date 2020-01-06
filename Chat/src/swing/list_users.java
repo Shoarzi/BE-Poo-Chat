@@ -14,6 +14,10 @@ public class list_users extends JFrame implements ActionListener{
 	public ArrayList<Boolean> ListStateButton=new ArrayList<Boolean>();
 	public ArrayList<JButton> list_button= new ArrayList<JButton>();
 	
+	//changer la liste par celle qu'on veut 
+	//ouvrir un socket et appeler Client.java creer ClientIn.java ! 
+	
+	
 	public list_users(ArrayList<String> ListUser, String User) {
 		this.setTitle("Users connected");
 		this.setBounds(100, 100, 346, 354);

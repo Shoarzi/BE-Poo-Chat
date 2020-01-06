@@ -16,6 +16,9 @@ import javax.swing.SwingConstants;
 public class chat extends JFrame {
 	private JTextField txtEef;
 	
+	//actionListener : send
+	//use sendMesssageToUser de Server.java
+	
 	public chat(String UserName) {
 		this.setTitle(UserName);
 		this.setBounds(100, 100, 875, 348);

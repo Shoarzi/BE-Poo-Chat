@@ -47,11 +47,6 @@ public class Server {
       InputStream testIS = client.getInputStream() ; 
       Scanner testSC = new Scanner ( testIS ) ; 
       String nickname = (testSC.nextLine());
-      if (!checkUniqueNickName(nickname)) {
-    	  // we display a message informing the double to the User
-          User newUser = new User(client, nickname); 
-          newUser.getOutStream().println("<b>This name is already taken</b> ");
-      }
       nickname = nickname.replace(",", ""); //  ',' use for serialisation
       nickname = nickname.replace(" ", "_");
       System.out.println("New Client: \"" + nickname + "\"\n\t     Host:" + client.getInetAddress().getHostAddress());
@@ -69,15 +64,6 @@ public class Server {
       new Thread(new UserHandler(this, newUser)).start();
     }
   }
-
-  private boolean checkUniqueNickName(String nickname) {
-	for (User client : this.clients) { 
-		if (client.getNickname() == nickname) { 
-			return false; 
-		}
-	}
-	return true ; 
-}
 
 // delete a user from the list
   public void removeUser(User user){

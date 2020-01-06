@@ -5,9 +5,12 @@ import java.util.ArrayList;
 
 import javax.swing.UIManager;
 
+import main_classes.Client;
+
 public class main {
 	public static void main(String[] args) {
 	
+		//(@MAC + Pseudo) + (infos pour envoyer msg (@ip) 
 		ArrayList<String> ListUser= new ArrayList<String>();
 		ListUser.add("user1");
 		ListUser.add("user2");
@@ -24,6 +27,11 @@ public class main {
 				loop_window.dispose();
 		}
 		ListUser.add(ID);
+		Client this_user = new Client(12345,(short) 16, ID); 
+		Thread th = new Thread(this_user);
+		th.start(); 
+		//this run can only occur whenever there is a conversation 
+		
 		//The user is connected
 		
 		list_users list_users_window= new list_users(ListUser, ID);
