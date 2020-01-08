@@ -29,9 +29,7 @@ public class main {
 		ListUser.add(ID);
 		Client this_user = new Client(12345,(short) 16, ID); 
 		Thread th = new Thread(this_user);
-		th.start(); 
-		//this run can only occur whenever there is a conversation 
-		
+		th.start(); 		
 		//The user is connected
 		
 		list_users list_users_window= new list_users(ListUser, ID);
@@ -44,7 +42,7 @@ public class main {
 			int indexUser=list_users_window.windowToOpen();
 			if(indexUser!=-9000)
 			{
-				chat newChat= new chat(ListUser.get(indexUser));
+				chat newChat= new chat(ListUser.get(indexUser), this_user);
 				list_users_window.ListStateButton.set(indexUser, false);
 			}
 				

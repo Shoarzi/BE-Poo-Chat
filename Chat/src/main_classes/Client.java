@@ -65,7 +65,6 @@ public class Client implements Runnable {
 		
       } 
       catch (IOException e) {
-		// TODO Auto-generated catch block
 		e.printStackTrace();
       } 
       
@@ -76,7 +75,7 @@ public class Client implements Runnable {
     try {
 		this.host = InetAddress.getByName(host);
 	} catch (UnknownHostException e) {
-		// TODO Auto-generated catch block
+		
 		e.printStackTrace();
 	}
     this.port = port;
@@ -107,9 +106,9 @@ public class Client implements Runnable {
 				String str = sc.nextLine() ; 
 				streamOut.println(str);
 			}
+			sc.close() ; 
 		
 	    } catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}	
 	
@@ -126,14 +125,10 @@ public class Client implements Runnable {
       socket_env.close();
       } 
       catch (SocketException e) {
-  		// TODO Auto-generated catch block
   		e.printStackTrace();
       }
-      catch (UnknownHostException e) {
-  		// TODO Auto-generated catch block
-  		e.printStackTrace();
-      } catch (IOException e) {
-		// TODO Auto-generated catch block
+      catch (IOException e) {
+		// 
 		e.printStackTrace();
       } 
   }
@@ -147,7 +142,6 @@ public class Client implements Runnable {
 	      socket_env.send(packet);
 	      socket_env.close();
 	} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 	}
   }
@@ -193,16 +187,23 @@ class ReceivedMessagesHandler implements Runnable {
     // receive server messages and print out to screen
     Scanner s = new Scanner(server);
     String tmp = "" ; 
-   // if(s.hasNextLine()) {
-    	tmp = s.nextLine(); 
+    if(s.hasNextLine()) {
+    	tmp = s.nextLine();
+    	if (tmp.charAt(0) == '&') {
+    		while (s.hasNextLine()) {
+    			tmp = s.nextLine();
+    			System.out.println(tmp);
+    		}
+    	}
     	if (tmp.charAt(0) == ';') { 
+    		//NewUserDetected : method to try to see if we know this user and if we his name has changed 
+    		//TODO : Has to send a notification back 
     		UserList.NewUserDetected(tmp.substring(1)) ; 
     	}
-    	while (s.hasNextLine()) {
-    		tmp = s.nextLine();
-    		System.out.println(tmp);
-    	} 
-    
+    	if (tmp.charAt(0) == '>') { 
+    		//TODO : Notify that this user has left. 
+    	}
+
     /*  if (tmp.charAt(0) == '[') {
         tmp = tmp.substring(1, tmp.length()-1);
         System.out.println(
@@ -216,7 +217,8 @@ class ReceivedMessagesHandler implements Runnable {
         } catch(Exception ignore){}
       }
     }*/
-    //s.close();
+    }
+    s.close();
   }
 
   public static String getTagValue(String xml){

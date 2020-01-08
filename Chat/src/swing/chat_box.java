@@ -19,6 +19,8 @@ import java.awt.Component;
 import javax.swing.Box;
 import java.awt.Dimension;
 import java.awt.Window.Type;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class chat_box {
 
@@ -46,7 +48,7 @@ public class chat_box {
 	 */
 	public chat_box() {
 		initialize();
-		//print_message();
+		//TODO : create a method to show historized messages print_message();
 	}
 
 	/**
@@ -82,7 +84,10 @@ public class chat_box {
 		textPane.setMaximumSize(new Dimension(10, 10));
 		scrollPane.setViewportView(textPane);
 	}
+	
+	
 	private void print_message(Message message) {
 		
 	}
+	
 }
