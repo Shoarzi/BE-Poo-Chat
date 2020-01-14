@@ -7,8 +7,10 @@ import java.io.FileWriter;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class UserList {
 	
@@ -44,8 +46,17 @@ public class UserList {
 		
 	}
 	
-	public static void NewUserDetected(String str) {
-		String newUserId = str.split(";")[3]; 
+	public static void NewUserDetected(String str, Client main_user) {
+		String pseudo = str.split(";;")[0]; 
+		String uuid = str.split(";;")[1]; 
+		String ipAdd = str.split(";;")[2]; 
+		/*if (pseudo == main_user.getNickname()) {
+			try {
+				main_user.Reply_Message("!", InetAddress.getByName(ipAdd));
+			} catch (UnknownHostException e) {
+				e.printStackTrace();
+			}
+		}*/
 		BufferedReader lecteurAvecBuffer = null;
 		String fileLigne;
 		boolean found = false ; 
@@ -54,10 +65,10 @@ public class UserList {
 			lecteurAvecBuffer = new BufferedReader(new FileReader(log));
 			while (!found && (fileLigne = lecteurAvecBuffer.readLine()) != null) { 
 				ligne += 1 ;  
-				if (newUserId == fileLigne.split(";")[3]) {
+				/*if (newUserId == fileLigne.split(";")[3]) {
 					found = true ; 
 
-				}
+				}*/
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -70,7 +81,7 @@ public class UserList {
 	
 	public static void addUser(Client us) {
 		UserList.listUserName.add(us.getNickname()) ;  
-		String str = us.getNickname()+";"+Integer.toString(us.getPort())+";"+us.getHost()+";"+us.getUserId();
+		String str = us.getNickname()+";;"+us.getUserId()+";;"+us.getHost();
 		BufferedWriter writer;
 		try {
 			writer = new BufferedWriter(new FileWriter(log));
@@ -79,6 +90,21 @@ public class UserList {
 		}
 		catch (IOException e) {
 			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+				
+	}
+	
+	public static void addUser(String nickname, String uuid, String host) {
+		UserList.listUserName.add(nickname) ;  
+		String str = nickname+";;"+uuid+";;"+host;
+		BufferedWriter writer;
+		try {
+			writer = new BufferedWriter(new FileWriter(log));
+			writer.write(str);
+			writer.close();
+		}
+		catch (IOException e) {
 			e.printStackTrace();
 		}
 				
@@ -96,7 +122,7 @@ public class UserList {
 		return listUserName.isEmpty() ; 
 	}
 	
-	public ArrayList<String> getlistUserName() {
+	public static ArrayList<String> getlistUserName() {
 		return listUserName ; 
 	}
 
@@ -119,14 +145,14 @@ public class UserList {
 			
 			while (!found && (ligne = lecteurAvecBuffer.readLine()) != null)
 			{ 
-				if (ligne.split(";")[0] == name) {
+				if (ligne.split(";;")[0] == name) {
 					found = true ; 
 				}
 			}
 			lecteurAvecBuffer.close();
 			
 			if (found) 
-				return InetAddress.getByName(ligne.split(";")[2]) ; 
+				return InetAddress.getByName(ligne.split(";;")[2]) ; 
 		}
 		catch(FileNotFoundException exc)
 		{

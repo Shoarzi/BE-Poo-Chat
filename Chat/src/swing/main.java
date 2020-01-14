@@ -5,13 +5,31 @@ import java.util.ArrayList;
 
 import javax.swing.UIManager;
 
+import Exceptions.UnavailableNicknameException;
 import main_classes.Client;
+import main_classes.UserList;
 
 public class main {
 	public static void main(String[] args) {
 	
 		//(@MAC + Pseudo) + (infos pour envoyer msg (@ip) 
-		ArrayList<String> ListUser= new ArrayList<String>();
+		Client this_user = new Client(12345,(short) 16);
+		Thread th = new Thread(this_user);
+		th.start(); 
+		//The user is connected
+		this_user.Broadcast("?"+this_user.getHost()) ; 
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e1) {
+			e1.printStackTrace();
+		}
+		ArrayList<String> ListUser;
+		if (UserList.getlistUserName() != null) 
+			ListUser = UserList.getlistUserName(); 
+		else 
+			ListUser = new ArrayList<String>();
+		
+		//ca c'est pour les tests ! 
 		ListUser.add("user1");
 		ListUser.add("user2");
 		ListUser.add("user3");
@@ -27,10 +45,7 @@ public class main {
 				loop_window.dispose();
 		}
 		ListUser.add(ID);
-		Client this_user = new Client(12345,(short) 16, ID); 
-		Thread th = new Thread(this_user);
-		th.start(); 		
-		//The user is connected
+				
 		
 		list_users list_users_window= new list_users(ListUser, ID);
 		while(true) {
