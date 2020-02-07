@@ -1,69 +1,113 @@
 package swing;
 
-import java.awt.List;
 import java.util.ArrayList;
+import java.util.Map;
 
 import javax.swing.UIManager;
-
-import Exceptions.UnavailableNicknameException;
+import javax.swing.UnsupportedLookAndFeelException;
 import main_classes.Client;
 import main_classes.UserList;
 
 public class main {
 	public static void main(String[] args) {
-	
-		//(@MAC + Pseudo) + (infos pour envoyer msg (@ip) 
+
+		//(Port + Mask) Thread Client <=> Message Handling
 		Client this_user = new Client(12345,(short) 16);
 		Thread th = new Thread(this_user);
-		th.start(); 
-		//The user is connected
-		this_user.Broadcast("?"+this_user.getHost()) ; 
+		th.start();
+		this_user.Broadcast(this_user.getHost()+"β"+"new"+"β"+"UUPseudo_Not_Defined") ; 
 		try {
 			Thread.sleep(1000);
 		} catch (InterruptedException e1) {
 			e1.printStackTrace();
 		}
-		ArrayList<String> ListUser;
-		if (UserList.getlistUserName() != null) 
-			ListUser = UserList.getlistUserName(); 
-		else 
-			ListUser = new ArrayList<String>();
-		
-		//ca c'est pour les tests ! 
-		ListUser.add("user1");
-		ListUser.add("user2");
-		ListUser.add("user3");
-		
-		//First tentative to connect
-		log first_window=new log();
-		String ID=first_window.returnId();
-		first_window.dispose();
-		//Loop tentative to connect
-		while(ListUser.contains(ID)) {
-				log_failed loop_window=new log_failed();
-				ID=loop_window.returnId();
-				loop_window.dispose();
+
+		try { 
+			UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel"); 
+		} 
+		catch (InstantiationException | ClassNotFoundException | IllegalAccessException | UnsupportedLookAndFeelException e) { 
+			e.printStackTrace();
 		}
-		ListUser.add(ID);
-				
-		
-		list_users list_users_window= new list_users(ListUser, ID);
-		while(true) {
+
+		boolean failureAttemptConnection = true;
+
+		String idField="Id : ";
+		String pseudoField="Login : ";
+		String pseudo="";
+		String id="";
+
+		//While Attempt Fail
+		while(failureAttemptConnection) {
+			logwindow window=new logwindow(pseudoField, idField);
+
+			//pseudo Field
+			pseudo=window.returnFields()[0];
+			if(pseudo.contentEquals(""))
+				pseudoField="Login Field Empty : ";
+			else if(UserList.listUserName.contains(pseudo))
+				pseudoField="Login Already Used : ";
+			else
+				pseudoField="Login : ";
+
+			//Id Field
+			id=window.returnFields()[1];
+			if(id.contentEquals(""))
+				idField="Id Field Empty : ";
+			else
+				idField="Id : ";
+
+			window.dispose();
+			failureAttemptConnection = pseudo.contentEquals("") || id.contentEquals("") || UserList.listUserName.contains(pseudo); 
+		}
+
+		UserList.addUser(pseudo,id,this_user.getHost().getHostAddress());
+		this_user.setPseudo(pseudo);
+		this_user.setUserId(id);
+		this_user.Broadcast(this_user.getHost()+"α"+this_user.getPseudo()+"α"+this_user.getUserId()+"α");
+		list_users list_users_window= new list_users(this_user);
+
+		//main loop to check if foreign_user button had been clicked
+		while(!UserList.getDisconnect()) {
 			try {
-		        Thread.sleep(3);
-		      } catch (InterruptedException e) {
-		        e.printStackTrace();
-		      }  
-			int indexUser=list_users_window.windowToOpen();
-			if(indexUser!=-9000)
-			{
-				chat newChat= new chat(ListUser.get(indexUser), this_user);
-				list_users_window.ListStateButton.set(indexUser, false);
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}  
+
+			//Update the foreign user List
+			if (UserList.getChange()) {
+				list_users_window.dispose(); 
+				list_users_window = new list_users(this_user);
+				UserList.setChange(false);
 			}
-				
 			
+			//selector of a button pressed
+			int j=-1;
+			//iterator on the buttons
+			int i=0;
+
+			//loop on every buttons			
+			for(i=0;i< list_users_window.list_button.size();i++)
+			{
+				 ArrayList<Boolean> testList = list_users.ListStateButton ; 
+				//return the index of the button that has been clicked
+				if(list_users.ListStateButton.get(i))
+				{
+					j=i;
+					break;
+				}
+			}
+
+			//open new chatbox if a button has been clicked
+			Map<String, chat> testclist = this_user.getChatList() ; 
+			if(j!=-1 ) { 
+				while (this_user.getChatList().containsKey((UserList.listUserId.get(j)))) { 
+					this_user.getChatList().remove(UserList.listUserId.get(j)).dispose() ; 
+				}
+				chat newChat= new chat(UserList.listUserName.get(j), this_user);
+				this_user.getChatList().put(UserList.listUserId.get(j), newChat) ; 
+				list_users.setFalseStateButton(j) ; 
+			}
 		}
-		//ouvrir chat_box
 	}
-		
 }

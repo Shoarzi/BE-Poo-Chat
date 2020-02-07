@@ -1,84 +1,156 @@
 package swing;
 
 import java.awt.BorderLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-
-import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.border.EtchedBorder;
+import javax.swing.border.TitledBorder;
+import main_classes.Client;
+import main_classes.UserList;
 
 public class list_users extends JFrame implements ActionListener{
-	
-	public ArrayList<Boolean> ListStateButton=new ArrayList<Boolean>();
+
+	public static ArrayList<Boolean> ListStateButton=new ArrayList<Boolean>();
 	public ArrayList<JButton> list_button= new ArrayList<JButton>();
-	
-	//changer la liste par celle qu'on veut 
-	//ouvrir un socket et appeler Client.java creer ClientIn.java ! 
-	
-	
-	public list_users(ArrayList<String> ListUser, String User) {
-		this.setTitle("Users connected");
-		this.setBounds(100, 100, 346, 354);
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.getContentPane().setLayout(new BorderLayout(0, 0));
-		
-		Box verticalBox = Box.createVerticalBox();
-		this.getContentPane().add(verticalBox, BorderLayout.CENTER);		
-		
-		int indexOfUser=ListUser.indexOf(User);
-		int n=ListUser.size();
-		for(int i=0;i<n;i++) {
-			if(i!=indexOfUser) {
-				JButton Button = new JButton( (String) ListUser.get(i));
-				list_button.add(Button);
-				ListStateButton.add(false);
-				Button.addActionListener(new buttonListener(i));
-				verticalBox.add(Button);
-			}
-			
+	private JScrollPane scroll;
+	private JPanel panellist;
+	private int nbUser;
+
+	public list_users(Client user) {
+		try { 
+			UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel"); 
+		} catch (InstantiationException | ClassNotFoundException | IllegalAccessException | UnsupportedLookAndFeelException e) {
+			e.printStackTrace();
 		}
-			
+		this.setTitle("Users connected");
+		this.setBounds(100, 100, 325, 354);
+		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		this.getContentPane().setLayout(new BorderLayout(0, 0));
+
+		panellist=new JPanel();
+		scroll = new JScrollPane(panellist, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		this.getContentPane().add(scroll);		
+
+		JPanel panel=new JPanel();
+		panel.setBorder ( new TitledBorder ( new EtchedBorder ()) );
+		
+		/*TODO : change ActionListener to make a correct Refresh
+		JButton refreshButton=new JButton("Refresh");
+		refreshButton.addActionListener(new refreshListener(this,user));
+		panel.add(refreshButton);*/
+		
+		JButton changeButton=new JButton("Change Login");
+		changeButton.addActionListener(new changeListener(this,user));
+
+		JButton disconnectButton= new JButton("Disconnect");
+		disconnectButton.addActionListener(new disconnectListener(this,user ));
+
+		panel.add(changeButton);
+		panel.add(disconnectButton);
+		this.getContentPane().add(panel, BorderLayout.SOUTH);		
+
+		changeButtonList() ; 
+
 		this.setVisible(true);
 	}
 	
-	//check ListStateButton and return the index of the button that has been clicked
-	int windowToOpen()
-	{
-		int i=0;
-		int window_to_open=-9000;
-		boolean open=false;
-		
-		while(!open)
-		{
-			for(i=0;i< this.list_button.size();i++)
-			{
-				open |=ListStateButton.get(i);
-				if(this.ListStateButton.get(i))
-					window_to_open=i;
-			}
-		} 
-		return window_to_open ;
-		
+	public void changeButtonList() {
+		nbUser=UserList.nb_user;
+		int height;
+		if(nbUser<5)
+			height=5;
+		else 
+			height=nbUser/2;
+		panellist.setLayout(new GridLayout(height+1,2));
+		for(int i=0;i<nbUser;i++) {
+			JButton Button= new JButton((String) UserList.listUserName.get(i));
+			list_button.add(Button);
+			ListStateButton.add(false);
+			Button.addActionListener(new buttonListener(i));
+			panellist.add(Button);
+		}
 	}
-	
+
+	//generic button listener to open a chatbox
 	class buttonListener implements ActionListener{
 		int index;
 		public buttonListener(int i) {
 			this.index=i;
 		}
 		public void actionPerformed(ActionEvent e) {
-			ListStateButton.set(index,true);
+			setTrueStateButton(index);
+		}
+	}
+
+	//button listener for the disconnect button
+	class disconnectListener implements ActionListener{
+		list_users frame_to_close ; 
+		Client this_user ; 
+		public disconnectListener(list_users fr, Client tu) {
+			frame_to_close = fr ; 
+			this_user = tu ; 
+		}
+		public void actionPerformed(ActionEvent e) {
+			this_user.Broadcast(this_user.getHost()+">"+this_user.getPseudo()+">"+this_user.getUserId()+">") ; 
+			frame_to_close.dispose();
+			UserList.setDisconnect(true);
+		}
+	}
+
+	//button listener for the refresh button
+	/*class refreshListener implements ActionListener{
+		list_users frame ;
+		Client thisUser;
+		public refreshListener(list_users fr, Client user) {
+			frame = fr; 
+			thisUser = user;
+		}
+		public void actionPerformed(ActionEvent e) {
+			frame.dispose();
+			new list_users(thisUser);
+		}
+	}*/
+
+	//Button Listener for the "change name" button
+	class changeListener implements ActionListener{
+		list_users frame ;
+		Client thisUser;
+
+		public changeListener(list_users fr,Client user) {
+			frame= fr; 
+			thisUser=user;
+
+		}
+		public void actionPerformed(ActionEvent e) {
+			new changeLoginWindow(thisUser, "New Login :");
+			frame.dispose();
 		}
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-		
+		// Auto-generated method stub
 	}
-	
 
-	
+	public static void setTrueStateButton(int index) {
+		ListStateButton.set(index, true) ; 
+	}
+
+	public static void setFalseStateButton(int index) {
+		ListStateButton.set(index, false) ; 
+	}
+
+	public JScrollPane getJScrollPane() { 
+		return scroll ; 
+	}
 }
